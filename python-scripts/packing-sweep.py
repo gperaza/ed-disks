@@ -10,10 +10,10 @@ of a disk packing.'''
 
 def write_input_file(ac, seed, dirname):
     f = open(dirname + "/input_file", "w")
-    f.write("""#nParticles           1
+    f.write("""#nParticles           60
 #seed                 """+seed+"""   (seed for random generator)
-#box_w                2        (in disk units)
-#box_h                3        (in disk units)
+#box_w                10        (in disk units)
+#box_h                10        (in disk units)
 #freq                 80       (in Hz, for bottom movement)
 #dimensionlessAc      """+ac+"""      (dimensionless acceleration of bottom)
 #gravity              9.81     (m/s)
@@ -40,7 +40,7 @@ def write_input_file(ac, seed, dirname):
 
 def run_simulation(ac, seed):
     reRun = False
-    execPath = "/home/moukarzel/dem-code/disks"
+    execPath = "/home/moukarzel/ed-disks/disks-event"
     dirname = "seed."+seed+".ac."+ac
     if os.path.isdir(dirname):
         if not reRun:
