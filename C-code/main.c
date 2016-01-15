@@ -58,7 +58,7 @@ double get_dt_event_disk_disk(long i, long j) {
     double q = rijx*rijx + rijy*rijy - Rij*Rij;
     if (q < 0) {
         printf("Error: Overlapping disks are getting closer.\n");
-        exit(0);
+        exit(1);
     }
 
     double det = vDotR*vDotR - vijSqrd*q;
@@ -127,7 +127,7 @@ double get_dt_event_disk_wall(long i /*Disk*/, long j /*Wall*/) {
         else {
             /* No positive solutions. */
             printf("Something went wrong\n");
-            exit(0);
+            exit(1);
         }
     }
     else {
@@ -292,7 +292,7 @@ int main() {
         double nTime = cTime + dt;
         if (nTime <= cTime) {
             printf("Error: Simulation not advancing. dt=%g\n", dt);
-            exit(0);
+            exit(1);
         }
 
         while (nTime > nextWrite) {
@@ -423,7 +423,7 @@ void get_input() {
 
     if ( (fp = fopen("input_file", "r")) == NULL ) {
         printf("Error opening input file.\n");
-        exit(0);
+        exit(1);
     }
 
     while (fgets(input, sizeof(input), fp) != NULL) {
