@@ -381,11 +381,13 @@ void write(double nextWrite) {
     fprintf(phase_space_fptr, "\n");
 }
 
+#ifdef GRAPHICS
 void graph(double nextGraph) {
     double dt = nextGraph - cTime;
     v_update(dt);
     graphics(-1, -1, 0);
 }
+#endif
 
 void write_packing() {
     FILE *packing_fptr;
