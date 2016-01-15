@@ -266,7 +266,9 @@ int main() {
 
     cTime = -thermalTime;
     double nextWrite = 0;       /* Do not write thermalization. */
+#ifdef GRAPHICS
     double nextGraph = 0;
+#endif
     double checkStep = 1;
     double checkTime = cTime + checkStep;
 
@@ -292,10 +294,13 @@ int main() {
             nextWrite += timeForWrite;
             printf("\rRunning: %0.lf%%", cTime/runTime*100); fflush(stdout);
         }
+
+#ifdef GRAPHICS
         while (nTime > nextGraph) {
             graph(nextGraph);
             nextGraph += timeForGraph;
         }
+#endif
 
         // graphics(i, j, type);
 
@@ -395,7 +400,9 @@ void write_packing() {
                 disk[i].x, disk[i].y, disk[i].R, disk[i].mass, disk[i].iMoment);
     }
     fclose(packing_fptr);
+#ifdef GRAPHICS
     graphics(-1, -1, 0);
+#endif
 }
 
 void get_input() {
