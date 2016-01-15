@@ -5,7 +5,7 @@ LIBS = ~/lib/libm.a ~/lib/libgsl.a ~/lib/libgslcblas.a
 CC = gcc
 
 HDRS = structures.h
-OBJS = main.o collision_rules.o front.o graphics.o
+OBJS = main.o collision_rules.o front.o
 
 default:$(OBJS)
 	$(CC)  $(CFLAGS) $(OBJS) $(GRAPHLIBS) $(LIBS) -o ../disks-event
@@ -16,5 +16,4 @@ clean:
 
 main.o:			Makefile-kukulkan $(HDRS)
 front.o:		Makefile-kukulkan $(HDRS)
-graphics.o:		Makefile-kukulkan $(HDRS)
 collision_rules.o:	Makefile-kukulkan $(HDRS)
