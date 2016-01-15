@@ -54,12 +54,15 @@ def run_simulation((ac, seed)):
     write_input_file(ac, seed, dirname)
     log = open(dirname + "/log", "w")
     errorLog = open(dirname + "/error_log", "w")
-    print("running ac = ", ac, "seed = ", seed)
+    # print("running ac = ", ac, "seed = ", seed)
+    error = False
     if subprocess.call([execPath], cwd=dirname, stdout=log, stderr=errorLog):
+        error = True
         print("Error at seed = ", seed, "ac = ", ac)
     log.close()
     errorLog.close()
-    print("done ac = ", ac, "seed = ", seed)
+    if not error:
+        print("done ac = ", ac, "seed = ", seed)
 
 
 def main():
