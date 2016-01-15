@@ -56,7 +56,10 @@ double get_dt_event_disk_disk(long i, long j) {
     double Rij = disk[i].R + disk[j].R;
     double vijSqrd = vijx*vijx + vijy*vijy;
     double q = rijx*rijx + rijy*rijy - Rij*Rij;
-    assert(q > 0);
+    if (q < 0) {
+        printf("Error: Overlapping disks are getting closer.\n");
+        exit(0);
+    }
 
     double det = vDotR*vDotR - vijSqrd*q;
     if (det < 0) {
@@ -68,7 +71,7 @@ double get_dt_event_disk_disk(long i, long j) {
        precision loss for small initial separation. */
     double dt = q/(-vDotR + sqrt(det));
 
-    assert(dt > 0);
+    assert(dt >= 0);
     return dt;
 }
 
@@ -124,7 +127,7 @@ double get_dt_event_disk_wall(long i /*Disk*/, long j /*Wall*/) {
         else {
             /* No positive solutions. */
             printf("Something went wrong\n");
-            exit(1);
+            exit(0);
         }
     }
     else {
@@ -269,8 +272,8 @@ int main() {
 #ifdef GRAPHICS
     double nextGraph = 0;
 #endif
-    double checkStep = 1;
-    double checkTime = cTime + checkStep;
+    double checkOverlapStep = 1;
+    double checkOverlapTime = cTime + checkOverlapStep;
 
     printf("Running: 0%%"); fflush(stdout);
     while (cTime < runTime) {
@@ -287,7 +290,10 @@ int main() {
         double dt =
             !type ? get_dt_event_disk_disk(i, j) : get_dt_event_disk_wall(i, j);
         double nTime = cTime + dt;
-        assert(nTime > cTime);
+        if (nTime <= cTime) {
+            printf("Error: Simulation not advancing. dt=%g\n", dt);
+            exit(0);
+        }
 
         while (nTime > nextWrite) {
             write(nextWrite);
@@ -310,10 +316,10 @@ int main() {
 
         // graphics(i, j, type);
 
-        if (cTime > checkTime) {
+        if (cTime > checkOverlapTime) {
             check_overlap_other(i, j);
         }
-        while (cTime > checkTime) checkTime += checkStep;
+        while (cTime > checkOverlapTime) checkOverlapTime += checkOverlapStep;
 
         /* Apply collision rule to colliding pair. */
         if (type == 0) collision_rule_disk_disk(i, j);
@@ -417,7 +423,7 @@ void get_input() {
 
     if ( (fp = fopen("input_file", "r")) == NULL ) {
         printf("Error opening input file.\n");
-        exit(1);
+        exit(0);
     }
 
     while (fgets(input, sizeof(input), fp) != NULL) {

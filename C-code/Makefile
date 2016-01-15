@@ -1,7 +1,7 @@
 GIT_VERSION := $(shell git describe --abbrev=4 --dirty --always --tags)
 CFLAGS = -Wall -O2 -std=gnu99 $(shell pkg-config --cflags  cairo)
 CFLAGS += -DVERSION=\"$(GIT_VERSION)\"
-CFLAGS += -DGRAPHICS
+#CFLAGS += -DGRAPHICS
 GRAPHLIBS = $(shell pkg-config --libs cairo)
 LIBS = -lm -lgsl -lgslcblas
 CC = gcc
