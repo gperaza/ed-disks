@@ -38,7 +38,7 @@ void pack_disks() {
     front.b->prev = front.a;
     front.last->next = NULL;
     front.last->prev = front.b;
-    //draw_frame(-1);
+    draw_frame(-1);
 
     /* Add first disk manually and update front. */
     /* Front is Wall_L -> Disk[0](a) -> Wall_B(b) -> Wall_R. */
@@ -48,7 +48,7 @@ void pack_disks() {
     disk[0].next = front.b;
     front.a->next = front.b->prev = &disk[0];
     front.a = &disk[0];
-    //draw_frame(0);
+    draw_frame(0);
 
     /* Build layers. */
     int success;
@@ -56,7 +56,7 @@ void pack_disks() {
         success = 0;
         while (!success) {
             success = front_add(i);
-            //draw_frame(i);
+            draw_frame(i);
         }
         if (front.b == front.last) {
             /* Restart front. */

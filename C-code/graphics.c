@@ -12,6 +12,16 @@ extern long nDisks;
 extern particle *disk;
 extern particle *wall;
 extern Front front;
+extern double cTime;
+
+void graphics(long, long, int);
+void v_update(double);
+
+void graph(double nextGraph) {
+    double dt = nextGraph - cTime;
+    v_update(dt);
+    graphics(-1, -1, 0);
+}
 
 void draw_arrow(cairo_t *cr, double start_x, double start_y,
                 double end_x, double end_y, double arrow_lenght) {
@@ -171,6 +181,21 @@ void draw_disk(cairo_t *cr, long id, double x, double y, double r,
     return;
 }
 
+void draw_disk_2(cairo_t *cr, double x, double y, double r, int front) {
+
+
+    cairo_arc(cr, x, y, r, 0, 2*M_PI);
+    if (!front) cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
+    else cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 0.3);
+    cairo_fill(cr);
+
+    cairo_arc(cr, x, y, r, 0, 2*M_PI);
+    cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
+    cairo_stroke(cr);
+
+   return;
+}
+
 void draw_frame(long i) {
     /* Draws already placed disks (up to i) and marks current front. */
 
@@ -198,7 +223,7 @@ void draw_frame(long i) {
     long j;
     cairo_set_line_width(cr,fmin(box_w, box_h)/800);
     for (j = 0; j <= i; j++) {
-        draw_disk(cr, j, disk[j].x, disk[j].y, disk[j].R, disk[j].theta);
+        draw_disk_2(cr, disk[j].x, disk[j].y, disk[j].R, 0);
     }
 
     /* Draw box */
@@ -209,19 +234,26 @@ void draw_frame(long i) {
 
     /* Draw front */
     particle *curr = front.first;
+    cairo_set_line_width(cr,fmin(box_w, box_h)/800);
     while (curr->next != NULL) {
-        cairo_set_source_rgb(cr, 1.0, 0.0, 0.0);
-        cairo_move_to(cr, curr->x, curr->y);
-        cairo_line_to(cr, curr->next->x, curr->next->y);
-        cairo_stroke(cr);
+        if (curr->type == 0) draw_disk_2(cr, curr->x, curr->y, curr->R, 1);
         curr = curr->next;
     }
+    /* curr = front.first; */
+    /* cairo_set_line_width(cr,fmin(box_w, box_h)/400); */
+    /* while (curr->next != NULL) { */
+    /*     cairo_set_source_rgb(cr, 1.0, 0.0, 0.0); */
+    /*     cairo_move_to(cr, curr->x, curr->y); */
+    /*     cairo_line_to(cr, curr->next->x, curr->next->y); */
+    /*     cairo_stroke(cr); */
+    /*     curr = curr->next; */
+    /* } */
 
     /* Draw active front */
-     cairo_set_source_rgb(cr, 0.0, 1.0, 0.0);
-     cairo_move_to(cr, front.a->x, front.a->y);
-     cairo_line_to(cr, front.b->x, front.b->y);
-     cairo_stroke(cr);
+     /* cairo_set_source_rgb(cr, 0.0, 1.0, 0.0); */
+     /* cairo_move_to(cr, front.a->x, front.a->y); */
+     /* cairo_line_to(cr, front.b->x, front.b->y); */
+     /* cairo_stroke(cr); */
 
     cairo_destroy(cr);
     cairo_surface_destroy(surface);

@@ -7,9 +7,6 @@
 #include <gsl/gsl_rng.h>
 #include "event.h"
 
-void pack_disks();
-void graphics(long, long, int);
-void draw_disks_label();
 void collision_rule_disk_disk(long, long);
 void collision_rule_disk_wall(long, long);
 void check_overlap_other();
